@@ -24,6 +24,7 @@ public class Main_BJ_2607_비슷한단어 { //하나의 문자를 더하거나 �
 			int [] copy = new int[26];
 			for(int j=0;j<copy.length;j++) copy[j] = alpha[j];
 			
+			
 			same=0;
 			String check = br.readLine();
 			for(int j=0;j<check.length();j++) {
