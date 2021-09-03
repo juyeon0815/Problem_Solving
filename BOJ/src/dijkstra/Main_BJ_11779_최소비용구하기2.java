@@ -77,11 +77,13 @@ public class Main_BJ_11779_최소비용구하기2 {
 	}
 	
 	public static void dijkstra() {
-		int current =0;
+		int min, current =0;
 		for(int i=0;i<N;i++) {
+			min = Integer.MAX_VALUE;
 			current=-1;
 			for(int j=1;j<N+1;j++) {
 				if(!visited[j] && distance[j]<min) {
+					min = distance[j];
 					current= j;
 				}
 			}
