@@ -62,11 +62,16 @@ public class Main_BJ_16469_소년점프 {
 	}
 	
 	public static void bfs() {
-		
+		int size = queue.size();
+		for(int i=0;i<size;i++) {
+			info temp = queue.poll();
+			temp.visited[temp.x][temp.y] = true;
+			
+			queue.add(new info(temp.x,temp.y,temp.time,temp.visited));
+		}
 		
 		while(!queue.isEmpty()) {
 			info temp = queue.poll();
-			temp.visited[temp.x][temp.y] = true;
 			
 			for(int i=0;i<4;i++) {
 				int nx = temp.x+dx[i];
@@ -85,15 +90,6 @@ public class Main_BJ_16469_소년점프 {
 	
 	public static boolean range(int x ,int y) {
 		return x>=0 && x<R && y>=0 && y<C;
-	}
-	
-	public static void print() {
-		for(int i=0;i<R;i++) {
-			for(int j=0;j<C;j++) {
-				System.out.print(time[i][j]+" ");
-			}
-			System.out.println();
-		}
 	}
 
 	public static void find() {
