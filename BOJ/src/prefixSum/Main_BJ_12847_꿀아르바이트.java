@@ -1,11 +1,13 @@
-package prefixSum;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main_BJ_12847_꿀아르바이트 {
+	
+	static int n,m;
+	static long sum,max=0;
+	static int [] arr;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,28 +15,28 @@ public class Main_BJ_12847_꿀아르바이트 {
 		
 		st = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(st.nextToken()); 
-		int m = Integer.parseInt(st.nextToken()); //일을 할 수 있는 날
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 		
-		int [] day = new int[n];
-		
-		long sum=0, max=0;
+		arr = new int[n];
 		
 		st = new StringTokenizer(br.readLine());
-		for(int i=0;i<n;i++) {
-			day[i] = Integer.parseInt(st.nextToken());
-			if(i<m) sum+=day[i];
-		}
+		for(int i=0;i<n;i++)  arr[i] = Integer.parseInt(st.nextToken());
+		
+		
+		for(int i=0;i<m-1;i++) sum+=arr[i];
 		
 		max = sum;
-		
-		for(int i=m;i<n;i++) {
-			sum+=day[i]-day[i-m];
-			
-			if(sum>max) max = sum;
+
+		int index = 0;
+		for(int i=m-1; i>=0 && i<arr.length;i++) {
+			sum+=arr[i];
+			max = Math.max(sum, max);
+			sum-=arr[index++];
 		}
-		
+
 		System.out.println(max);
+
 	}
 
 }
