@@ -1,0 +1,107 @@
+import java.util.*;
+import java.util.Map.Entry;
+
+class Solution {
+    
+    static HashMap<Integer, String> order = new HashMap<>();
+    static int [] len = new int[11];
+    static int [] alpabet = new int [26];
+    static ArrayList<Integer> food, choice;
+    static ArrayList<String> result, save;
+    static int res=0,max=0;
+    
+    public String[] solution(String[] orders, int[] course) {
+        input(orders);
+        sum();
+        result = new ArrayList<>();
+        
+        select();
+        for(int i=0;i<course.length;i++){
+            choice = new ArrayList<>();
+            max=0;
+            save = new ArrayList<>();
+            comb(course[i],course[i],0);
+            result.addAll(save);
+        }
+        Collections.sort(result);
+        
+        String[] answer= result.toArray(new String[result.size()]);
+        return answer;
+    }
+    
+    public static void input(String[] orders) {
+        for(int i=0;i<orders.length;i++) {
+            order.put(i,orders[i]);
+            String line = orders[i];
+            len[line.length()]++;
+            for(int j=0;j<line.length();j++) {
+                alpabet[line.charAt(j)-65]++;
+            }
+        }
+        for(int i=1;i<=10;i++) System.out.print(len[i]+" ");
+        System.out.println();
+    }
+    
+    public static void sum() {
+        for(int i=9;i>=1;i--) {
+            len[i-1]+=len[i];
+        }
+    }
+    
+    public static void select() {
+        food = new ArrayList<>();
+        for(int i=0;i<alpabet.length; i++) {
+            if(alpabet[i]>=2) food.add(i);
+        }
+    }
+    
+    public static void comb(int com,int cnt, int start) {
+        if(cnt==0) {
+            if(checkLen(com))
+                check(com);
+            return;
+        }
+        
+        for(int i=start;i<food.size();i++) {
+            choice.add(food.get(i));
+            comb(com,cnt-1, i+1);
+            choice.remove(choice.size()-1);
+        }
+    }
+    
+    public static void check(int com) {
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i=0;i<choice.size();i++) 
+            sb.append((char)(choice.get(i)+65));
+        
+        int count=0, cnt=0;
+        for(int i=0;i<order.size();i++) {
+            
+            String menu = order.get(i);
+            if(menu.length()<sb.toString().length()) continue;
+            
+            for(int j=0;j<choice.size();j++){
+                char me = (char)(choice.get(j)+65);
+                if(menu.contains(String.valueOf(me))) count++;
+            }
+            if(count==com) {
+                cnt++;
+            }
+            count=0;
+        }
+        
+        if(cnt>=2) {
+            if(max<cnt) {
+                save.clear();
+                max = cnt;
+                save.add(sb.toString());
+            }else if(max==cnt) save.add(sb.toString());
+        }
+    }
+    
+    public static boolean checkLen(int com) {
+        if(len[com]>=2) return true;
+        else return false;
+    }
+}
