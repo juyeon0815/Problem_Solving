@@ -1,0 +1,100 @@
+import java.util.*;
+
+class Solution {
+    
+    static HashMap<String, ArrayList<Integer>> condition = new HashMap<>();
+    static ArrayList<Integer> result = new ArrayList<>();
+    static StringTokenizer st;
+    
+    public int[] solution(String[] info, String[] query) {
+        
+        input(info);
+        count(query);
+        
+        int [] answer = new int[result.size()];
+        for(int i=0;i<result.size();i++) answer[i] = result.get(i);
+        return answer;
+    }
+    
+    public static void input(String[] info) {
+        StringBuilder sb = new StringBuilder();
+        
+        ArrayList<Integer> list;
+        
+        for(int i=0;i<info.length;i++){
+            st = new StringTokenizer(info[i]);
+            list = new ArrayList<Integer>();
+            
+            int size = st.countTokens();
+            for(int j=0;j<size-1;j++) {
+                sb.append(st.nextToken());
+            }
+            
+            if(condition.containsKey(sb.toString())){
+                list=condition.get(sb.toString());
+                list.add(Integer.parseInt(st.nextToken()));
+            }else {
+                list.add(Integer.parseInt(st.nextToken()));
+            }
+            
+            Collections.sort(list);
+            condition.put(sb.toString(), list);
+            sb.setLength(0);
+        }
+    }
+    
+    public static void count(String[] query) {
+        ArrayList<String> save;
+        ArrayList<Integer> sco;
+        
+        for(int i=0;i<query.length;i++) {
+            String line = query[i].replaceAll("and ","");
+            
+            st = new StringTokenizer(line);
+            int size = st.countTokens();
+            
+            save = new ArrayList<>();
+            
+            for(int j=0;j<size-1;j++){
+                String word = st.nextToken();
+                if(word.equals("-")) continue;
+                save.add(word);
+            }
+            
+            int score = Integer.parseInt(st.nextToken());
+            
+            int count=0;
+            sco = new ArrayList<>();
+            for(String key : condition.keySet()){
+                String con = key;
+                boolean flag = true;
+                
+                loop :
+                for(int k=0;k<save.size();k++){
+                    if(!con.contains(save.get(k))) {
+                        flag = false;
+                        break loop; 
+                    }
+                }
+
+                if(flag) {
+      
+                    int left = 0, right = condition.get(key).size() - 1;
+
+                    while (left <= right) {
+                        int mid = (left + right) / 2;
+
+                        if (condition.get(key).get(mid) < score)
+                            left = mid + 1;
+                        else
+                            right = mid - 1;
+                    }
+
+                    count+=(condition.get(key).size()-left);
+                    
+                }
+            }
+            result.add(count); 
+        }
+    }
+}
